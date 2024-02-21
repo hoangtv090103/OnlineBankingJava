@@ -13,8 +13,6 @@ public class Model {
     Connection conn;
     private Statement statement;
 
-
-
     public Model(Connection conn, String name) {
         this.conn = conn;
         this.name = name;
@@ -35,7 +33,6 @@ public class Model {
 
         String query = new String("SELECT * FROM " + this.name + " WHERE ");
 
-
         for (int i = 0; i < keyList.size(); i++) {
             query += keyList.get(i) + " = " + "'" + valueList.get(i) + "'";
             if (i < keyList.size() - 1) {
@@ -54,7 +51,6 @@ public class Model {
     public String And(String a, String b) {
         return a + " AND " + b;
     }
-
 
     public ResultSet create(HashMap<String, String> valList) throws SQLException {
         ResultSet res = null;
@@ -89,7 +85,30 @@ public class Model {
 
         return res;
 
+    }
 
+    public boolean update(HashMap<String, String> valList) throws SQLException {
+        ArrayList<ArrayList<String>> data = fieldValueSplit(valList);
+        ArrayList<String> keyList = data.get(0);
+        ArrayList<String> valueList = data.get(1);
+
+        String query = "UPDATE " + this.name + " SET ";
+        for (int i = 0; i < keyList.size(); i++) {
+            query += keyList.get(i) + " = " + "'" + valueList.get(i) + "'";
+            if (i < keyList.size() - 1) {
+                query += ", ";
+            }
+        }
+        query += " WHERE id = " + valueList.get(0);
+
+        try {
+            this.statement.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public ArrayList<ArrayList<String>> fieldValueSplit(HashMap<String, String> valList) {

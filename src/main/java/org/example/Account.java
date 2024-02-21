@@ -37,12 +37,55 @@ public class Account extends Model {
         return res;
     }
 
-public void createUser(String username, String password) throws SQLException {
-    Users user = new Users(this.conn);
-    ResultSet res = user.create(new HashMap<String, String>() {{
-        put("username", username);
-        put("password", password);
-    }});
-    this.userId = user.id;
-}
+    public void createUser(String username, String password) throws SQLException {
+        Users user = new Users(this.conn);
+        ResultSet res = user.create(new HashMap<String, String>() {
+            {
+                put("username", username);
+                put("password", password);
+            }
+        });
+        this.userId = user.id;
+    }
+
+    public boolean deposit(int amount) throws SQLException {
+        this.amount += amount;
+        try{
+            this.update(new HashMap<String, String>() {
+                {
+                    put("id", String.valueOf(Account.this.id));
+                    put("amount", String.valueOf(Account.this.amount));
+                }
+            });
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // public boolean transfer(int amount, int toAccountId) throws SQLException {
+    //     this.amount -= amount;
+    //     try {
+    //         this.update(new HashMap<String, String>() {
+    //             {
+    //                 put("id", String.valueOf(Account.this.id));
+    //                 put("amount", String.valueOf(Account.this.amount));
+    //             }
+    //         });
+    //         Account toAccount = new Account(this.conn);
+    //         // toAccount.retrieve(toAccountId);
+    //         toAccount.amount += amount;
+    //         toAccount.update(new HashMap<String, String>() {
+    //             {
+    //                 put("id", String.valueOf(toAccount.id));
+    //                 put("amount", String.valueOf(toAccount.amount));
+    //             }
+    //         });
+    //         return true;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return false;
+    //     }
+    // }
 }
