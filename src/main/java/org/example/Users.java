@@ -29,4 +29,14 @@ public class Users extends Model {
         }
         return res;
     }
+
+    public ResultSet login(String username, String password) throws SQLException {
+        ResultSet res = null;
+        HashMap<String, String> conditions = new HashMap<String, String>() {{
+            put("username", username);
+            put("password", password);
+        }};
+        res = super.filter(conditions);
+        return res;
+    }
 }
