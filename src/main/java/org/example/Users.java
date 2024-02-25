@@ -16,6 +16,16 @@ public class Users extends Model {
 
     @Override
     public ResultSet create(HashMap<String, String> valList) throws SQLException {
+        // Check if the user exists
+        ResultSet user = this.filter(new HashMap<String, String>() {
+            {
+                put("username", valList.get("username"));
+            }
+        });
+
+        if (user.next()) {
+            return null;
+        }
         ResultSet res = super.create(valList);
 
         try {
@@ -32,10 +42,12 @@ public class Users extends Model {
 
     public ResultSet login(String username, String password) throws SQLException {
         ResultSet res = null;
-        HashMap<String, String> conditions = new HashMap<String, String>() {{
-            put("username", username);
-            put("password", password);
-        }};
+        HashMap<String, String> conditions = new HashMap<String, String>() {
+            {
+                put("username", username);
+                put("password", password);
+            }
+        };
         res = super.filter(conditions);
         return res;
     }

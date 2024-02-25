@@ -38,7 +38,6 @@ public class AppPanel extends JPanel {
             Users users = new Users(conn);
             try {
                 ResultSet res = users.login(username, password);
-                // handle the result
 
                 // Update the UI
                 this.revalidate();

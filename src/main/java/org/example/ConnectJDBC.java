@@ -1,7 +1,5 @@
 package org.example;
 
-import oracle.jdbc.logging.annotations.Logging;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,5 +22,4 @@ public class ConnectJDBC {
 
         return conn;
     }
-
 }
